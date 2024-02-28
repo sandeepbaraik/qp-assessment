@@ -1,0 +1,26 @@
+CREATE DATABASE IF NOT EXISTS qp;
+
+USE qp;
+
+CREATE TABLE IF NOT EXISTS groceries (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    quantity INT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS orders (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    userId INT NOT NULL,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS order_groceries (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    orderId INT NOT NULL,
+    groceryId INT NOT NULL,
+    quantity INT NOT NULL,
+    totalPrice DECIMAL(10, 2) NOT NULL,
+    CONSTRAINT fk_order_id FOREIGN KEY (orderId) REFERENCES orders(id),
+    CONSTRAINT fk_grocery_id FOREIGN KEY (groceryId) REFERENCES groceries(id)
+);

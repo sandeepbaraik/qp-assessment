@@ -39,7 +39,7 @@ export const updateGroceryItem = async(data: any, params:any) => {
     }
 };
 
-export const deleteGroceryItem = async(data: any,) => {
+export const deleteGroceryItem = async(data: any) => {
     try {
         const queryString = `DELETE FROM groceries WHERE id = ${data.id}`;
         await connection.query(queryString);
@@ -48,9 +48,10 @@ export const deleteGroceryItem = async(data: any,) => {
     }
 };
 
-export const orderGroceryItems = async(data: any) => {
+export const orderGroceryItems = async(params: any, data: any) => {
     try {
-        const {orders, userId} = data;
+        const orders = data.orders;
+        const userId = params.userId
         console.log('data: ', data);
         
         let orderIds = Object.keys(orders);
@@ -79,14 +80,13 @@ export const orderGroceryItems = async(data: any) => {
             }
             console.log('orderGroceries: ', orderGroceries);
             
-            const date = moment().tz(tz).format("YYYY-MM-DD HH:mm:ss");
-            let ordersQuery = `INSERT INTO orders (userId, orderDate) VALUES (${userId}, '${date}')`
+            let ordersQuery = `INSERT INTO orders (userId) VALUES (${userId})`
             let orderResp: any = await connection.query(ordersQuery);
             let orderGroceriesQuery = `INSERT INTO order_groceries (orderId, groceryId, quantity, totalPrice) VALUES `
             if(orderGroceries.length > 0) {
                 for(let item of orderGroceries) {
                     orderGroceriesQuery += `(${orderResp[0].insertId}, ${item.groceryId}, ${item.quantity}, ${item.totalPrice}), `;
-                    const groceriesQuery = `UPDATE groceries SET quantity = ${updatedGroceryItem[item.groceryId]}`;
+                    const groceriesQuery = `UPDATE groceries SET quantity = ${updatedGroceryItem[item.groceryId]} WHERE id = ${item.groceryId}`;
                     await connection.query(groceriesQuery);
                     console.log('orderGroceriesQuery: ', orderGroceriesQuery);
                     

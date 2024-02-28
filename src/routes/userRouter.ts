@@ -4,6 +4,6 @@ import {getAllGrocery, orderGrocery } from '../Controllers/groceryItemController
 
 const userRouter = express.Router();
 userRouter.get('/grocery', getAllGrocery);
-userRouter.post('/orderGrocery', orderGrocery);
+userRouter.post('/orderGrocery/:userId', orderGrocery);
 
 export { userRouter };

@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  nodejs-app:
+    container_name: nodejs-container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DB_HOST=mysql-db
+      - DB_USER=root
+      - DB_PASSWORD=example
+      - DB_NAME=qp
+    volumes:
+      - ./src:/app/src
+    depends_on:
+      - mysql-db
+
+  mysql-db:
+    container_name: mysql-container-qp
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: qp
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./src/Connections/init.sql:/docker-entrypoint-initdb.d/init.sql

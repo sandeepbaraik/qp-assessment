@@ -43,7 +43,7 @@ export const deleteGrocery = async(req: Request, res: Response) => {
 
 export const orderGrocery = async(req: Request, res: Response) => {
   try {
-    let response: any = await orderGroceryItems(req.body);    
+    let response: any = await orderGroceryItems(req.params, req.body);    
     res.status(200).json(response);
   } catch(err) {
     console.log('deleteGrocery err: ', err);
