@@ -48,7 +48,7 @@ export const deleteGroceryItem = async(data: any) => {
     }
 };
 
-export const orderGroceryItems = async(params: any, data: any) => {
+export const poorderGroceryItems = async(params: any, data: any) => {
     try {
         const orders = data.orders;
         const userId = params.userId
